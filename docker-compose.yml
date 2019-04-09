@@ -7,8 +7,8 @@ services:
     container_name: gitlab_redis
     networks:
       - gitlab
-    labels:
-      - "traefik.enable=false"
+    #labels:
+    #  - "traefik.enable=false"
 
   postgresql:
     restart: always
@@ -22,17 +22,18 @@ services:
       - ./postgresql:/var/lib/postgresql/data:Z
     networks:
       - gitlab
-    labels:
-      - "traefik.enable=false"
+    #labels:
+    #  - "traefik.enable=false"
   
   gitlab:
     image: gitlab/gitlab-ce
+    #build: . (For Dockerfile)
     container_name: gitlab_server
     restart: always
     environment:
-      TZ: Europe/Madrid
+      TZ: America/Santiago
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://192.168.1.14:8090'
+        external_url 'http://10.10.68.203'
         # Database
         postgresql['enable'] = false
         gitlab_rails['db_username'] = 'gitlab'
@@ -76,7 +77,7 @@ services:
       #- traefik
     ports:
       - "2222:22"
-      - "8090:80"
+      - "9090:80"
     depends_on:
       - postgresql
       - redis
